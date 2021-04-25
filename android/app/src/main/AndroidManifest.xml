@@ -1,7 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="romario.cabo.com.br.consulta_estados_cidades.consulta_estados_cidades">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
    <application
         android:label="consulta_estados_cidades"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

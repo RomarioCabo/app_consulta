@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
-import 'package:intl/intl.dart';
+import 'package:consulta_estados_cidades/shared/model/response_interface.dart';
 
-class StateDTO {
+class StateDTO implements ResponseInterface {
   int id;
   String name;
   String acronym;

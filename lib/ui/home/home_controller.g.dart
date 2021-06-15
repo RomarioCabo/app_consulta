@@ -25,6 +25,23 @@ mixin _$HomeController on HomeControllerBase, Store {
     });
   }
 
+  final _$loadMoreRequestStateAtom =
+      Atom(name: 'HomeControllerBase.loadMoreRequestState');
+
+  @override
+  RequestState get loadMoreRequestState {
+    _$loadMoreRequestStateAtom.reportRead();
+    return super.loadMoreRequestState;
+  }
+
+  @override
+  set loadMoreRequestState(RequestState value) {
+    _$loadMoreRequestStateAtom.reportWrite(value, super.loadMoreRequestState,
+        () {
+      super.loadMoreRequestState = value;
+    });
+  }
+
   final _$statesAtom = Atom(name: 'HomeControllerBase.states');
 
   @override
@@ -47,10 +64,18 @@ mixin _$HomeController on HomeControllerBase, Store {
     return _$getStatesAsyncAction.run(() => super.getStates());
   }
 
+  final _$loadMoreAsyncAction = AsyncAction('HomeControllerBase.loadMore');
+
+  @override
+  Future<void> loadMore() {
+    return _$loadMoreAsyncAction.run(() => super.loadMore());
+  }
+
   @override
   String toString() {
     return '''
 requestStateGet: ${requestStateGet},
+loadMoreRequestState: ${loadMoreRequestState},
 states: ${states}
     ''';
   }

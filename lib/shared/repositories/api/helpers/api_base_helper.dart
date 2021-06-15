@@ -88,7 +88,9 @@ class ApiBaseHelper {
       http.Response response =
           await http.Response.fromStream(await request.send());
 
-      responseJson = _returnResponse(response);
+      var responseHeaders = response.headers;
+
+      responseJson = _returnResponse(response, responseHeaders);
 
       return responseJson;
     } catch (e) {
@@ -96,7 +98,7 @@ class ApiBaseHelper {
     }
   }
 
-  dynamic _returnResponse(http.Response response) {
+  dynamic _returnResponse(http.Response response, var responseHeaders) {
     if (!kReleaseMode) {
       print("${response.statusCode} ${utf8.decode(response.bodyBytes)}");
     }
@@ -107,7 +109,16 @@ class ApiBaseHelper {
         if (response.bodyBytes.length == 0) {
           return null;
         } else {
-          return json.decode(utf8.decode(response.bodyBytes));
+          final Map<String, dynamic> dataResponseHeaders = new Map<String, dynamic>();
+          dataResponseHeaders['totalElements'] = responseHeaders["totalelements"];
+          dataResponseHeaders['totalPages']    = responseHeaders["totalpages"];
+
+          final Map<String, dynamic> data = new Map<String, dynamic>();
+          data['headers'] = json.decode(json.encode(dataResponseHeaders));
+          data['body']    = json.decode(utf8.decode(response.bodyBytes));
+
+          //return json.decode(utf8.decode(response.bodyBytes));
+          return data;
         }
 
         break;

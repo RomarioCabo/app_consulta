@@ -113,33 +113,37 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget _buildListStates() {
-    return Column(
-      children: [
-        Expanded(
-          child: NotificationListener(
-            onNotification: (ScrollNotification notification) {
-              if (notification != null &&
-                  notification.metrics.pixels ==
-                      notification.metrics.maxScrollExtent) {
+    return Observer(
+      builder: (_) {
+        return Column(
+          children: [
+            Expanded(
+              child: NotificationListener(
+                onNotification: (ScrollNotification notification) {
+                  if (notification != null &&
+                      notification.metrics.pixels ==
+                          notification.metrics.maxScrollExtent) {
+                    _homeController.loadMore();
+                  }
+                  return false;
+                },
+                child: ListView.builder(
+                  padding: EdgeInsets.all(8),
+                  itemCount: _homeController.states.length +
+                      (_homeController.loadLast ? 0 : 1),
+                  itemBuilder: (context, index) {
+                    if (index == _homeController.states.length) {
+                      return LoadMore();
+                    }
 
-              }
-
-              return false;
-            },
-            child: ListView.builder(
-              padding: EdgeInsets.all(8),
-              itemCount: _homeController.states.length,
-              itemBuilder: (context, index) {
-                if (index == _homeController.states.length) {
-                  return LoadMore();
-                }
-
-                return StateTile(state: _homeController.states[index]);
-              },
+                    return StateTile(state: _homeController.states[index]);
+                  },
+                ),
+              ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 }
